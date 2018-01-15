@@ -4,19 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.commonlib.utils.ActionConstant;
 import com.example.commonlib.utils.Router;
-import com.example.commonlib.utils.RouterManager;
-import com.example.commonlib.utils.RouterTarget;
+import com.example.commonlib.utils.RouterManagerByMap;
 import com.example.loginlibrary.R;
-
-import java.util.Enumeration;
-
-import dalvik.system.DexFile;
 
 /**
  * Created by lishaojie on 2018/1/11.
@@ -38,7 +32,7 @@ public class LoginActivity extends Activity {
     }
 
     public void login(View view) {
-        jumpByRouter();
+        jumpByRouterByMap();
     }
 
     /**
@@ -68,10 +62,18 @@ public class LoginActivity extends Activity {
         }
     }
     /**
+     * 通过初始化跳转表实现路由
+     */
+    private void jumpByRouterByMap() {
+        new Router.Builder(this, RouterManagerByMap.getInstance().getRouter(ActionConstant.ACTION_USER_INFO))
+                .addParams(ActionConstant.KEY_USER_NAME, mEtUserName.getText().toString())
+                .addParams(ActionConstant.KEY_PASS_WORD, mEtPwd.getText().toString()).build().jump();
+    }
+    /**
      * 通过注解实现的路由
      */
-    private void jumpByRouter() {
-        new Router.Builder(this, RouterManager.getInstance().getRouter(ActionConstant.ACTION_USER_INFO))
+    private void jumpByRouterByAnnotation() {
+        new Router.Builder(this, RouterManagerByMap.getInstance().getRouter(ActionConstant.ACTION_USER_INFO))
                 .addParams(ActionConstant.KEY_USER_NAME, mEtUserName.getText().toString())
                 .addParams(ActionConstant.KEY_PASS_WORD, mEtPwd.getText().toString()).build().jump();
     }
